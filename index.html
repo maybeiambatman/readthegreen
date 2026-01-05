@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Read the Green - Golf Strategy Game</title>
+    <title>Read the Green - Golf Caddie Strategy Game</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,32 +11,30 @@
         <!-- Left Sidebar -->
         <div id="sidebar">
             <h1>Read the Green</h1>
+            <p class="subtitle">Caddie Strategy Game</p>
+
             <div class="info-panel">
                 <div class="info-row">
                     <span class="label">Attempt</span>
                     <span id="attempt-number" class="value">1</span>
                 </div>
                 <div class="info-row">
-                    <span class="label">Stroke</span>
-                    <span id="current-stroke" class="value">0</span>
+                    <span class="label">Current Score</span>
+                    <span id="current-score" class="value">E</span>
                 </div>
                 <div class="info-row">
                     <span class="label">Par</span>
                     <span class="value">4</span>
                 </div>
+                <div class="info-row">
+                    <span class="label">Distance</span>
+                    <span class="value">420 yds</span>
+                </div>
             </div>
 
             <div class="info-panel conditions">
-                <h3>Today's Conditions</h3>
-                <div class="info-row">
-                    <span class="label">Wind</span>
-                    <span id="wind-info" class="value">Calm</span>
-                </div>
-                <div class="wind-arrow" id="wind-arrow">➤</div>
-                <div class="info-row">
-                    <span class="label">Pin</span>
-                    <span id="pin-position" class="value">Center</span>
-                </div>
+                <h3>Pin Position</h3>
+                <div id="pin-description" class="pin-desc">Center - Medium difficulty</div>
             </div>
 
             <div class="info-panel legend">
@@ -49,6 +47,7 @@
                 <div class="legend-item"><span class="terrain-swatch water"></span> Water</div>
                 <div class="legend-item"><span class="terrain-swatch green"></span> Green</div>
                 <div class="legend-item"><span class="terrain-swatch trees"></span> Trees</div>
+                <div class="legend-item"><span class="terrain-swatch fog"></span> Unexplored</div>
             </div>
 
             <div id="phase-indicator" class="info-panel">
@@ -68,41 +67,46 @@
             <div id="planning-controls">
                 <div id="shot-plan">
                     <h3>Shot Plan</h3>
-                    <div id="shots-list"></div>
+                    <div id="shots-list">
+                        <p class="muted">Click on the course to set targets</p>
+                    </div>
                 </div>
 
-                <div id="zone-size-selector">
-                    <h4>Zone Size</h4>
-                    <button class="zone-btn" data-size="small">Small (3x3)</button>
-                    <button class="zone-btn active" data-size="medium">Medium (5x5)</button>
-                    <button class="zone-btn" data-size="large">Large (7x7)</button>
-                </div>
-
-                <div id="probability-display" class="hidden">
-                    <h4>Shot Probability</h4>
-                    <div id="prob-breakdown"></div>
+                <div id="shot-info-panel">
+                    <h4>Current Shot</h4>
+                    <div id="shot-details">
+                        <p class="muted">Hover over course to see distances</p>
+                    </div>
                 </div>
 
                 <div id="action-buttons">
                     <button id="undo-btn" class="action-btn" disabled>Undo Last</button>
+                    <button id="clear-btn" class="action-btn" disabled>Clear All</button>
                     <button id="execute-btn" class="action-btn primary" disabled>Execute Plan</button>
                 </div>
             </div>
         </div>
 
-        <!-- Right Panel for Shot Info -->
+        <!-- Right Panel - Player Observations -->
         <div id="right-panel">
-            <div id="shot-preview" class="info-panel">
-                <h3>Current Shot</h3>
-                <div id="preview-content">
-                    <p>Click on the course to plan your shots</p>
+            <div id="player-profile" class="info-panel">
+                <h3>Your Player</h3>
+                <div id="player-name">Unknown Golfer</div>
+                <p class="muted">Watch and learn their tendencies</p>
+            </div>
+
+            <div id="observations-panel" class="info-panel">
+                <h3>Scouting Notes</h3>
+                <div id="observations-list">
+                    <p class="muted">Notes will appear as you observe your player</p>
                 </div>
             </div>
 
-            <div id="revealed-info" class="info-panel">
-                <h3>Discovered Info</h3>
-                <div id="slopes-discovered">
-                    <p class="muted">Land on cells to reveal slopes</p>
+            <div id="course-knowledge" class="info-panel">
+                <h3>Course Knowledge</h3>
+                <div id="knowledge-stats">
+                    <p>Revealed: <span id="revealed-pct">0%</span></p>
+                    <p>Hazards found: <span id="hazards-found">0</span></p>
                 </div>
             </div>
         </div>
@@ -111,18 +115,19 @@
     <!-- Execution Overlay -->
     <div id="execution-overlay" class="hidden">
         <div id="execution-content">
-            <h2>Executing Plan</h2>
+            <h2>Watching Round</h2>
             <div id="execution-log"></div>
+            <div id="current-action"></div>
         </div>
     </div>
 
     <!-- Result Overlay -->
     <div id="result-overlay" class="hidden">
         <div id="result-content">
-            <h2 id="result-title">Round Complete</h2>
+            <h2 id="result-title">Hole Complete</h2>
             <div id="result-score"></div>
-            <div id="result-analysis"></div>
-            <div id="result-summary"></div>
+            <div id="result-breakdown"></div>
+            <div id="new-observations"></div>
             <button id="try-again-btn" class="action-btn primary">Try Again</button>
         </div>
     </div>
@@ -131,9 +136,17 @@
     <div id="victory-overlay" class="hidden">
         <div id="victory-content">
             <h1>BIRDIE!</h1>
+            <p class="victory-subtitle">You've mastered this hole</p>
             <div id="victory-stats"></div>
-            <div id="victory-summary"></div>
-            <button id="play-again-btn" class="action-btn primary">Play Again (Reset)</button>
+            <div id="scouting-report">
+                <h3>Player Scouting Report</h3>
+                <div id="final-observations"></div>
+            </div>
+            <div id="course-map-summary">
+                <h3>Course Map</h3>
+                <p id="map-completion"></p>
+            </div>
+            <button id="play-again-btn" class="action-btn primary">Play Again (New Player)</button>
         </div>
     </div>
 
