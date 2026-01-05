@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Read the Green - Golf Strategy Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Left Sidebar -->
+        <div id="sidebar">
+            <h1>Read the Green</h1>
+            <div class="info-panel">
+                <div class="info-row">
+                    <span class="label">Attempt</span>
+                    <span id="attempt-number" class="value">1</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Stroke</span>
+                    <span id="current-stroke" class="value">0</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Par</span>
+                    <span class="value">4</span>
+                </div>
+            </div>
+
+            <div class="info-panel conditions">
+                <h3>Today's Conditions</h3>
+                <div class="info-row">
+                    <span class="label">Wind</span>
+                    <span id="wind-info" class="value">Calm</span>
+                </div>
+                <div class="wind-arrow" id="wind-arrow">➤</div>
+                <div class="info-row">
+                    <span class="label">Pin</span>
+                    <span id="pin-position" class="value">Center</span>
+                </div>
+            </div>
+
+            <div class="info-panel legend">
+                <h3>Terrain</h3>
+                <div class="legend-item"><span class="terrain-swatch tee"></span> Tee Box</div>
+                <div class="legend-item"><span class="terrain-swatch fairway"></span> Fairway</div>
+                <div class="legend-item"><span class="terrain-swatch rough"></span> Rough</div>
+                <div class="legend-item"><span class="terrain-swatch deep-rough"></span> Deep Rough</div>
+                <div class="legend-item"><span class="terrain-swatch bunker"></span> Bunker</div>
+                <div class="legend-item"><span class="terrain-swatch water"></span> Water</div>
+                <div class="legend-item"><span class="terrain-swatch green"></span> Green</div>
+                <div class="legend-item"><span class="terrain-swatch trees"></span> Trees</div>
+            </div>
+
+            <div id="phase-indicator" class="info-panel">
+                <h3>Phase</h3>
+                <div id="current-phase">Planning</div>
+            </div>
+        </div>
+
+        <!-- Main Game Area -->
+        <div id="main-area">
+            <div id="course-container">
+                <canvas id="course-canvas"></canvas>
+                <div id="ball" class="hidden"></div>
+            </div>
+
+            <!-- Planning Controls -->
+            <div id="planning-controls">
+                <div id="shot-plan">
+                    <h3>Shot Plan</h3>
+                    <div id="shots-list"></div>
+                </div>
+
+                <div id="zone-size-selector">
+                    <h4>Zone Size</h4>
+                    <button class="zone-btn" data-size="small">Small (3x3)</button>
+                    <button class="zone-btn active" data-size="medium">Medium (5x5)</button>
+                    <button class="zone-btn" data-size="large">Large (7x7)</button>
+                </div>
+
+                <div id="probability-display" class="hidden">
+                    <h4>Shot Probability</h4>
+                    <div id="prob-breakdown"></div>
+                </div>
+
+                <div id="action-buttons">
+                    <button id="undo-btn" class="action-btn" disabled>Undo Last</button>
+                    <button id="execute-btn" class="action-btn primary" disabled>Execute Plan</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel for Shot Info -->
+        <div id="right-panel">
+            <div id="shot-preview" class="info-panel">
+                <h3>Current Shot</h3>
+                <div id="preview-content">
+                    <p>Click on the course to plan your shots</p>
+                </div>
+            </div>
+
+            <div id="revealed-info" class="info-panel">
+                <h3>Discovered Info</h3>
+                <div id="slopes-discovered">
+                    <p class="muted">Land on cells to reveal slopes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Execution Overlay -->
+    <div id="execution-overlay" class="hidden">
+        <div id="execution-content">
+            <h2>Executing Plan</h2>
+            <div id="execution-log"></div>
+        </div>
+    </div>
+
+    <!-- Result Overlay -->
+    <div id="result-overlay" class="hidden">
+        <div id="result-content">
+            <h2 id="result-title">Round Complete</h2>
+            <div id="result-score"></div>
+            <div id="result-analysis"></div>
+            <div id="result-summary"></div>
+            <button id="try-again-btn" class="action-btn primary">Try Again</button>
+        </div>
+    </div>
+
+    <!-- Victory Overlay -->
+    <div id="victory-overlay" class="hidden">
+        <div id="victory-content">
+            <h1>BIRDIE!</h1>
+            <div id="victory-stats"></div>
+            <div id="victory-summary"></div>
+            <button id="play-again-btn" class="action-btn primary">Play Again (Reset)</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
